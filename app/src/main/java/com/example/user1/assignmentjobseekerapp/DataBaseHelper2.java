@@ -19,6 +19,8 @@ public class DataBaseHelper2 extends SQLiteOpenHelper {
     public static final String col_4="Description";
     public static final String col_5="num_apply";
     public static final String col_6="location";
+    public static final String col_7="imageURL";
+
 
     public DataBaseHelper2(Context context) {
         super(context,DATABASE_NAME, null, 1);
@@ -27,7 +29,7 @@ public class DataBaseHelper2 extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+TABLE_NAME+" (ID INTEGER PRIMARY KEY AUTOINCREMENT,Title Text,Salary INTEGER,Description Text,num_apply INTEGER,location Text) ");
+        db.execSQL("create table "+TABLE_NAME+" (ID INTEGER PRIMARY KEY AUTOINCREMENT,Title Text,Salary INTEGER,Description Text,num_apply INTEGER,location Text,imageURL Text) ");
     }
 
     @Override

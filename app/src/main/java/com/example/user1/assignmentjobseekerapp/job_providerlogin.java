@@ -29,7 +29,7 @@ public class job_providerlogin extends AppCompatActivity {
         btnlogin=(Button)findViewById(R.id.button3);
         openHelper=new DataBaseHelper(this);
         db = openHelper.getReadableDatabase();
-
+CheckUser();
     }
 
 private boolean validateusername() {
@@ -82,9 +82,11 @@ String role="Admin";
         cursor = db.rawQuery("SELECT *FROM " + DataBaseHelper.user_table + " WHERE " + DataBaseHelper.col_2 + "=? AND " + DataBaseHelper.col_3 + "=? AND "+DataBaseHelper.col_7+"=?" , new String[]{username, pass,role});
         if (cursor != null) {
             if (cursor.getCount() > 0) {
-                Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(this,post_job.class);
-                startActivity(intent);
+                UtilsClipCodes.saveSharedSetting(job_providerlogin.this, "ClipCodes", "true");
+                UtilsClipCodes.SharedPrefesSAVE(getApplicationContext(), username);
+                Intent ImLoggedIn = new Intent(getApplicationContext(), post_job.class);
+                startActivity(ImLoggedIn);
+                finish();
             } else {
 
                 Toast.makeText(getApplicationContext(), "Login error", Toast.LENGTH_SHORT).show();
@@ -101,5 +103,17 @@ String role="Admin";
     public void forgotpwd(View view) {
         Intent intent=new Intent(this,forgotpwd.class);
         startActivity(intent);
+    }
+
+    public void CheckUser(){
+
+        Boolean Check = Boolean.valueOf(UtilsClipCodes.readSharedSetting(job_providerlogin.this, "ClipCodes", "true"));
+
+        Intent introIntent = new Intent(job_providerlogin.this, post_job.class);
+        introIntent.putExtra("ClipCodes", Check);
+
+        if (Check) {
+            startActivity(introIntent);
+        }
     }
 }

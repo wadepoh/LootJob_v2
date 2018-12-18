@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 public class job_seekerlogin extends AppCompatActivity {
     SQLiteDatabase db;
@@ -20,6 +22,8 @@ public class job_seekerlogin extends AppCompatActivity {
     EditText textusername;
     EditText textpwd;
     Button btnlogin;
+
+    ConstraintLayout loginform1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +31,18 @@ public class job_seekerlogin extends AppCompatActivity {
         textusername=(EditText)findViewById(R.id.textusername);
         textpwd=(EditText)findViewById(R.id.textpwd);
         btnlogin=(Button)findViewById(R.id.button3);
+        loginform1=(ConstraintLayout)findViewById(R.id.loginform1);
         openHelper=new DataBaseHelper(this);
         db = openHelper.getReadableDatabase();
+
+CheckUser();
+
+
+
+
+
+
+
     }
     private boolean validateusername() {
         String unameinput=textusername.getEditableText().toString().trim();
@@ -80,9 +94,17 @@ public class job_seekerlogin extends AppCompatActivity {
         cursor = db.rawQuery("SELECT *FROM " + DataBaseHelper.user_table + " WHERE " + DataBaseHelper.col_2 + "=? AND " + DataBaseHelper.col_3 + "=? AND "+DataBaseHelper.col_7+"=?" , new String[]{username, pass,role});
         if (cursor != null) {
             if (cursor.getCount() > 0) {
-                Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
+
+                UtilsClipCodes.saveSharedSetting(job_seekerlogin.this, "ClipCodes", "true");
+                UtilsClipCodes.SharedPrefesSAVE(getApplicationContext(), username);
+                Intent ImLoggedIn = new Intent(getApplicationContext(), joblist.class);
+                startActivity(ImLoggedIn);
+                finish();
+
+
+              /*  Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(this,joblist.class);
-                startActivity(intent);
+                startActivity(intent); */
 
             } else {
                 Toast.makeText(getApplicationContext(), "Login error", Toast.LENGTH_SHORT).show();
@@ -93,7 +115,24 @@ public class job_seekerlogin extends AppCompatActivity {
 
 
 
+
+
     }
+
+
+
+    public void CheckUser(){
+
+        Boolean Check = Boolean.valueOf(UtilsClipCodes.readSharedSetting(job_seekerlogin.this, "ClipCodes", "true"));
+
+        Intent introIntent = new Intent(job_seekerlogin.this, joblist.class);
+        introIntent.putExtra("ClipCodes", Check);
+
+        if (Check) {
+            startActivity(introIntent);
+        }
+    }
+
 
 
     public void forgotpwd(View view) {

@@ -6,15 +6,26 @@ public class job {
     private String desc;
     private Integer numb_app;
     private String location;
-public job(String Title,Integer Salary,String desc,Integer numb_app,String location)
+    private  String imageURL;
+public job(String Title,Integer Salary,String desc,Integer numb_app,String location,String imageURL)
 {
 this.Title=Title;
 this.Salary=Salary;
 this.desc=desc;
 this.numb_app=numb_app;
 this.location=location;
+this.imageURL=imageURL;
 
 }
+public String getImageURL(){
+
+    return imageURL;
+}
+public void setImageURL(String imageURL){
+    this.imageURL=imageURL;
+
+}
+
 public String getTitle(){
     return Title;
 
